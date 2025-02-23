@@ -1,12 +1,12 @@
 {
   "production": {
     "username": "root",
-    "password": "mndAIutIvPIbPJzFhnBGFQbydLJptcPS",
-    "database": "c_cleaning",
+    "password": "ZDWxEthUVIkmLhNIsnDZTASEauWLToom",
+    "database": "railway",
     "host": "mysql.railway.internal",
     "port": 3306,
     "dialect": "mysql",
-    "uri": "mysql://root:mndAIutIvPIbPJzFhnBGFQbydLJptcPS@mysql.railway.internal:3306/c_cleaning"
+    "uri": "mysql://root:ZDWxEthUVIkmLhNIsnDZTASEauWLToom@mysql.railway.internal:3306/railway"
   },
   "test": {
     "username": "root",
