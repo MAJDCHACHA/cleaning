@@ -31,7 +31,7 @@ app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
 app.use("/api", express.static(path.join(__dirname, "public")));
-app.use("/uploads", express.static("uploads")); // To serve static files
+app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use("/", root);
