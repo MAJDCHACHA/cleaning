@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, './config.json'); 
 const configData = JSON.parse(readFileSync(configPath, 'utf8'));
 
-const env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'production';
 const config = configData[env];
 const db = {};
 
