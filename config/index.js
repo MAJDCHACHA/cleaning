@@ -12,7 +12,7 @@ const __dirname = path.dirname(__filename);
 const configPath = path.join(__dirname, './config.json'); 
 const configData = JSON.parse(readFileSync(configPath, 'utf8'));
 
-const env = process.env.NODE_ENV || 'production';
+const env = process.env.NODE_ENV || 'development';
 const config = configData[env];
 const db = {};
 
@@ -20,7 +20,7 @@ let sequelize;
 if (config.use_env_variable) {
   sequelize = new Sequelize(process.env[config.use_env_variable], config);
 } else {
-  sequelize = new Sequelize(config.database, config.username, config.password, config);
+  sequelize = new Sequelize(config.database, config.username, config.password,config);
 }
 
 const initializeDatabase = async () => {
