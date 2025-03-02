@@ -1,4 +1,5 @@
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
 const { User, Admin } = db;
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";

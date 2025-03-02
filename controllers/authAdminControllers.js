@@ -1,5 +1,6 @@
-import db from "../config/index.js";
-const { Admin } = db;
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
+const { Admin } = db ;
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 dotenv.config();
@@ -11,7 +12,7 @@ const register_admin = async (req, res) => {
       return res.status(400).json({ message: `Bad Request` });
     }
 
-    const foundUser = await Admin.findOne({
+    const foundUser = await Admin.find({
       where: {
         name: name,
         password: password,

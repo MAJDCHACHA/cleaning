@@ -1,4 +1,5 @@
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
 const { available_time } = db;
 const create_available_time = async (req, res) => {
   try {

@@ -1,5 +1,6 @@
 
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
 const { services, services_extra, services_need, extras, NeedToBeDone, frequency } = db;
 //   const { name, extras, need } = req.body;
 

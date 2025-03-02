@@ -1,7 +1,8 @@
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
+
 import path from "path";
 import multer from "multer";
-import { where } from "sequelize";
 
 // Configure multer for file upload
 const storage = multer.diskStorage({

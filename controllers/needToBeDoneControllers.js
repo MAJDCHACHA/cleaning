@@ -1,4 +1,5 @@
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
 const { NeedToBeDone } = db;
 const Create_needToBeDone = async (req, res) => {
   try {

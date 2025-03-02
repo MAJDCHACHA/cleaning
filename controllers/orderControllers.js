@@ -1,5 +1,6 @@
-import { where } from "sequelize";
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
+
 const { orders, order_extra, order_need, extras, NeedToBeDone,User } = db;
 const Create_order = async (req, res) => {
   const {

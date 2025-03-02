@@ -1,12 +1,13 @@
 {
   "production": {
-    "username": "root",
-    "password": "ZDWxEthUVIkmLhNIsnDZTASEauWLToom",
-    "database": "railway",
-    "host": "mysql.railway.internal",
-    "port": 3306,
+    "use_env_variable": "DATABASE_URL",
     "dialect": "mysql",
-    "uri": "mysql://root:ZDWxEthUVIkmLhNIsnDZTASEauWLToom@mysql.railway.internal:3306/railway"
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
   },
   "test": {
     "username": "root",
@@ -14,8 +15,7 @@
     "database": "c_cleaning",
     "host": "localhost",
     "port": 3306,
-    "dialect": "mysql",
-    "uri": "mysql://root:123456@localhost:3306/c_cleaning"
+    "dialect": "mysql"
   },
   "development": {
     "username": "root",
@@ -23,7 +23,6 @@
     "database": "c_cleaning",
     "host": "localhost",
     "port": 3306,
-    "dialect": "mysql",
-    "uri": "mysql://root:123456@localhost:3306/c_cleaning"
+    "dialect": "mysql"
   }
 }

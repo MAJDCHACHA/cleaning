@@ -23,10 +23,10 @@ dotenv.config();
 const app = express();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const port = process.env.PORT;
+const port = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(helmet());
 app.use(cookieParser());
 app.use(express.json());
@@ -45,14 +45,19 @@ app.use("/available", availableRoute);
 app.use("/order", orderRoute);
 app.all("*", typeOfSend);
 
-initializeDatabase.then((db) => {
-  db.sequelize.sync({ alter: false })
-    .then(() => {
-      app.listen(port, () => {
-        console.log(`Server running at http://localhost:${port}`);
-      });
-    })
-    .catch((err) => {
-      console.error("Database sync error:", err);
+
+const startServer = async () => {
+  try {
+    const db = await initializeDatabase();     
+    await db.sequelize.sync({ alter: false });
+
+    app.listen(port, () => {
+      console.log(`Server running at http://localhost:${port}`);
     });
-});
+  } catch (error) {
+    console.error("Error initializing database or server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();

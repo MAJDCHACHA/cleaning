@@ -1,4 +1,6 @@
-import db from "../config/index.js";
+import initializeDatabase from '../config/index.js';
+const db = await initializeDatabase();
+
 const { frequency } = db;
 const create_frequency = async (req, res) => {
   try {
