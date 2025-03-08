@@ -1,7 +1,7 @@
 
 import initializeDatabase from '../config/index.js';
 const db = await initializeDatabase();
-const { services, services_extra, services_need, extras, NeedToBeDone, frequency } = db;
+const { Services, services_extra, services_need, extras, NeedToBeDone, frequency } = db;
 //   const { name, extras, need } = req.body;
 
 //   if (!name) {
@@ -48,7 +48,7 @@ const create_services = async (req, res) => {
 
   try {
     // Create a new service
-    const newService = await services.create({ name });
+    const newService = await Services.create({ name });
 
     const id_services = newService.id;
 
@@ -80,7 +80,7 @@ const create_services = async (req, res) => {
 };
 const get = async (req, res) => {
   try {
-    const servicesData = await services.findAll({
+    const servicesData = await Services.findAll({
         where:{isDeleted:false},
       attributes: ['id', 'name'],
       include: [
@@ -132,7 +132,7 @@ const get = async (req, res) => {
 const getById = async (req, res) => {
   try {
     const { id } = req.params;
-    const findServices = await services.findAll({
+    const findServices = await Services.findAll({
       where: { id: id },
       attributes: ['id', 'name'],
       include: [
@@ -171,7 +171,7 @@ const edit_service = async (req, res) => {
 
   try {
     // Find the existing service by ID
-    const existingService = await services.findByPk(id);
+    const existingService = await Services.findByPk(id);
     if (!existingService) {
       return res.status(404).json({ message: "Service not found" });
     }
@@ -216,7 +216,7 @@ const delete_service = async (req, res) => {
 
   try {
     // Check if the service exists
-    const existingService = await services.findByPk(id);
+    const existingService = await Services.findByPk(id);
     if (!existingService) {
       return res.status(404).json({ message: "Service not found" });
     }
