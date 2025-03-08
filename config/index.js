@@ -1,3 +1,59 @@
+// // import fs from 'fs';
+// // import path from 'path';
+// // import { Sequelize } from 'sequelize';
+// // import { fileURLToPath, pathToFileURL } from 'url';
+// // import { readFileSync } from 'fs';
+// // import dotenv from 'dotenv';
+
+// // dotenv.config();
+
+// // const __filename = fileURLToPath(import.meta.url);
+// // const __dirname = path.dirname(__filename);
+// // const configPath = path.join(__dirname, './config.json'); 
+// // const configData = JSON.parse(readFileSync(configPath, 'utf8'));
+
+// // const env = process.env.NODE_ENV || 'production';
+// // const config = configData[env];
+// // const db = {};
+
+// // let sequelize;
+// // if (config.use_env_variable) {
+// //   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+// // } else {
+// //   sequelize = new Sequelize(config.database, config.username, config.password,config);
+// // }
+
+// // const initializeDatabase = async () => {
+// //   const modelFiles = fs
+// //     .readdirSync(path.join(__dirname, '../models'))
+// //     .filter(file => file.indexOf('.') !== 0 && file.slice(-3) === '.js');
+
+// //   for (const file of modelFiles) {
+// //     const fileUrl = pathToFileURL(path.join(__dirname, '../models', file));
+// //     const model = await import(fileUrl.href);
+
+// //     const modelInstance = model.default
+// //       ? model.default(sequelize, Sequelize.DataTypes)
+// //       : model[Object.keys(model)[0]](sequelize, Sequelize.DataTypes);
+
+// //     db[modelInstance.name] = modelInstance;
+// //   }
+
+// //   // Set up associations
+// //   Object.keys(db).forEach(modelName => {
+// //     if (db[modelName].associate) {
+// //       db[modelName].associate(db);
+// //     }
+// //   });
+
+// //   db.sequelize = sequelize;
+// //   db.Sequelize = Sequelize;
+
+// //   return db; 
+// // };
+
+// // // Export a Promise that resolves when the database is ready
+// // export default initializeDatabase();
 // import fs from 'fs';
 // import path from 'path';
 // import { Sequelize } from 'sequelize';
@@ -12,48 +68,74 @@
 // const configPath = path.join(__dirname, './config.json'); 
 // const configData = JSON.parse(readFileSync(configPath, 'utf8'));
 
-// const env = process.env.NODE_ENV || 'production';
+// const env = process.env.NODE_ENV || 'development';
 // const config = configData[env];
 // const db = {};
 
 // let sequelize;
-// if (config.use_env_variable) {
-//   sequelize = new Sequelize(process.env[config.use_env_variable], config);
+
+// if (env === 'production') {
+//   sequelize = new Sequelize(process.env.DATABASE_URL, {
+//     dialect: 'mysql',
+//     dialectOptions: {
+//       ssl: {
+//         require: true,
+//         rejectUnauthorized: false
+//       }
+//     },
+//     logging: false
+//   });
 // } else {
-//   sequelize = new Sequelize(config.database, config.username, config.password,config);
+//   sequelize = new Sequelize(
+//     config.database,
+//     config.username,
+//     config.password,
+//     {
+//       host: config.host,
+//       dialect: config.dialect,
+//       port: config.port,
+//       logging: false
+//     }
+//   );
 // }
 
 // const initializeDatabase = async () => {
-//   const modelFiles = fs
-//     .readdirSync(path.join(__dirname, '../models'))
-//     .filter(file => file.indexOf('.') !== 0 && file.slice(-3) === '.js');
+//   try {
+//     await sequelize.authenticate();
+//     console.log("✅ Connection to the database has been established successfully.");
 
-//   for (const file of modelFiles) {
-//     const fileUrl = pathToFileURL(path.join(__dirname, '../models', file));
-//     const model = await import(fileUrl.href);
+//     const modelFiles = fs
+//       .readdirSync(path.join(__dirname, '../models'))
+//       .filter(file => file.endsWith('.js'));
 
-//     const modelInstance = model.default
-//       ? model.default(sequelize, Sequelize.DataTypes)
-//       : model[Object.keys(model)[0]](sequelize, Sequelize.DataTypes);
+//     for (const file of modelFiles) {
+//       const fileUrl = pathToFileURL(path.join(__dirname, '../models', file));
+//       const model = await import(fileUrl.href);
+//       const modelInstance = model.default
+//         ? model.default(sequelize, Sequelize.DataTypes)
+//         : model[Object.keys(model)[0]](sequelize, Sequelize.DataTypes);
 
-//     db[modelInstance.name] = modelInstance;
-//   }
-
-//   // Set up associations
-//   Object.keys(db).forEach(modelName => {
-//     if (db[modelName].associate) {
-//       db[modelName].associate(db);
+//       db[modelInstance.name] = modelInstance;
 //     }
-//   });
 
-//   db.sequelize = sequelize;
-//   db.Sequelize = Sequelize;
+//     Object.keys(db).forEach(modelName => {
+//       if (db[modelName].associate) {
+//         db[modelName].associate(db);
+//       }
+//     });
 
-//   return db; 
+//     db.sequelize = sequelize;
+//     db.Sequelize = Sequelize;
+
+//     console.log("✅ Models loaded successfully.");
+//     return db;
+//   } catch (error) {
+//     console.error("❌ Error initializing database:", error.message);
+//   }
 // };
 
-// // Export a Promise that resolves when the database is ready
-// export default initializeDatabase();
+// export default initializeDatabase;
+
 import fs from 'fs';
 import path from 'path';
 import { Sequelize } from 'sequelize';
@@ -75,7 +157,15 @@ const db = {};
 let sequelize;
 
 if (env === 'production') {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
+  const databaseUrl = process.env.DATABASE_URL;
+
+  if (!databaseUrl) {
+    throw new Error("❌ DATABASE_URL is not defined!");
+  }
+
+  console.log("✅ Loaded DATABASE_URL:", databaseUrl);
+
+  sequelize = new Sequelize(databaseUrl, {
     dialect: 'mysql',
     dialectOptions: {
       ssl: {
@@ -135,4 +225,3 @@ const initializeDatabase = async () => {
 };
 
 export default initializeDatabase;
-
